@@ -1,0 +1,84 @@
+{% extends 'navbar.html' %}
+{% load humanize %}
+{% block title %}학생 상세 정보{% endblock title %}
+{% block content %}
+
+  아이디 :
+  {{student.id}}<br>
+  이름 :
+  {{student.name}}<br>
+  학년 :
+  {{student.get_sch_year_display}}<br>
+  등록일 :
+  {{student.regi_date|date:'Y-m-d'}}<br>
+  연락처 :
+  {{student.phone}}<br>
+  회비일 :
+  {{student.due_date|date:'Y-m-d'}}
+  <br>
+  회비 :
+  {{student.due}}<br>
+  결제수단 :
+
+  {{student.get_payment_method_display}}<br>
+  {% if student.payment_method == 'card' %}
+    은행 :
+    {{student.card_bank}}<br>
+    카드 번호 :
+    {{student.card_number}}<br>
+  {% endif %}
+  메모 :
+  {{student.memo}}<br>
+
+  <button type="button" onclick="location.href='{{student.id}}/edit' ">학생 정보 수정</button>
+
+  <table border="1" width="95%" align="center">
+    <colgroup>
+      <col span="1" width="15%">
+      <col span="1" width="15%">
+      <col span="1" width="15%">
+      <col span="1" width="15%">
+      <col span="1" width="15%">
+      <col span="1" width="15%">
+
+    </colgroup>
+    <tr align="center">
+      <p>
+        <td colspan="6" span="span">결제 목록</td>
+      </p>
+    </tr>
+    <tr>
+      <td>월</td>
+      <td>입금일</td>
+      <td>승인일</td>
+      <td>금액</td>
+      <td>결제수단</td>
+      <td>입금 확인</td>
+
+    </tr>
+
+    {% for i in money %}
+      <tr onclick="window.location='/fin/{{i.id}}';">
+        <td>{{i.pay_month}}월</td>
+
+        <td>{{i.pay_date|date:'Y-m-d'}}</td>
+        <td>{{i.get_date|date:'Y-m-d'}}</td>
+        <td>{{i.due|intcomma}}원</td>
+        <td>{{i.get_payment_method_display}}</td>
+        <td>
+          {% if i.pay_check %}
+            <p>결제 완료</p>
+          {% else %}
+            <p style='color:red'>결제 미완료</p>
+          {% endif %}
+          {% if i.get_check %}
+            <p>승인 완료</p>
+          {% else %}
+            <p style='color:red'>승인 미완료</p>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+
+  </table>
+{% endblock content %}

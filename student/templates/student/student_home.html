@@ -1,0 +1,80 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block title %}학생 목록{% endblock title %}
+
+{% block content %}
+  <!DOCTYPE html>
+  <html lang="en">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body"></div>
+          <form action="." method="post" id='delete_form'>
+            {% csrf_token %}
+            <div class="modal-footer">
+              <button form='delete_form' name='stu_id' type="submit" class="btn btn-default" data-dismiss="">데이터 삭제</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+
+    <head>
+      <meta charset="UTF-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="stylesheet" href="{% static 'css/student/student_home.css'%}"/>
+      <title>이루마</title>
+    </head>
+
+    <body>
+      <div class="all">
+        <table id="mainlist">
+          <colgroup>
+            <col span="1" width="12%">
+            <col span="1" width="25%">
+            <col span="1" width="18%">
+            <col span="1" width="18%">
+            <col span="1" width="25%">
+
+          </colgroup>
+          <tr class="list_title">
+            <td class="list">이름</td>
+            <td class="list">학년</td>
+            <td class="list">회비일</td>
+            <td class="list">등록일</td>
+            <td class='list'>연락처</td>
+          </tr>
+          {% for i in student %}
+            <tr>
+
+              <td onclick="window.location='{{i.id}}';" class="sublist">{{i.name}}</td>
+              <td onclick="window.location='{{i.id}}';" class="sublist">{{i.get_sch_year_display}}</td>
+              <td onclick="window.location='{{i.id}}';" class="sublist">{{i.due_date|date:'Y-m-d'}}</td>
+              <td onclick="window.location='{{i.id}}';" class="sublist">{{i.regi_date|date:'Y-m-d'}}</td>
+              <td onclick="window.location='{{i.id}}';" class="sublist">{{i.phone}}</td>
+              <td class="sublist remove">
+                <button type="button" id='{{i.id}}' value='{{i.name}}' onclick='reply_click(this)' class="remove_btn" data-toggle="modal" data-target="#myModal">
+                  삭제
+                </button>
+
+              </td>
+            </tr>
+          {% endfor %}
+
+        </table>
+        <input onclick="location.href='create' " class="add" type="button" value="학생추가"/>
+      </div>
+    </body>
+    <script src='{% static 'js/delete_modal.js' %}'></script>
+
+  </html>
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends 'navbar.html' %}
+{% load humanize %}
+{% block title %}회비 상세 정보{% endblock title %}
+{% block content %}
+
+  아이디 :
+  {{money.id}}<br>
+  이름 :
+  <a href="/student/{{money.student.id}}">{{money.student.name}}</a><br>
+  등록일 :
+  {{money.pay_date|date:'Y-m-d'}}<br>
+  연락처 :
+  {{money.student.phone}}<br>
+  회비일 :
+  {{money.student.due_date|date:'Y-m-d'}}
+  <br>
+  회비 :
+  {{money.due|intcomma}}원<br>
+  결제수단 :
+  {{money.get_payment_method_display}}<br>
+  {% if money.payment_method == 'card' %}
+    은행 :
+    {{money.card_bank}}<br>
+    카드 번호 :
+    {{money.card_number}}<br>
+  {% endif %}
+  메모 :
+  {{money.memo}}<br>
+
+  <button type="button" onclick="location.href='{{money.id}}/edit' ">결제 정보 수정</button>
+
+{% endblock content %}
